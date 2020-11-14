@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: milan
@@ -13,38 +14,38 @@
     <link href="css/style_leeslijst.css" rel="stylesheet">
 </head>
 <body>
-<header>
-    <h1>leeslijst</h1>
-    <nav>
-        <ul>
-            <li><a href="Servlet">Home pagina</a></li>
-            <li><a href="zoek.jsp">zoek een boek</a></li>
-            <li><a href="voegToe.jsp">voeg een boek toe</a></li>
-            <li><a href="Servlet?command=overzicht">overzicht van boeken</a></li>
-        </ul>
-    </nav>
-</header>
+<jsp:include page="header.jsp"></jsp:include>
 <main>
     <article>
         <h2>vul de velden in om je boek toe te voegen</h2>
-        <%if (request.getAttribute("error") !=null){
-            String error = (String) request.getAttribute("error");
-        %>
-        <p id="error"><%=error%></p>
-        <%}%>
+        <c:if test="${not empty errors}">
+            <div class="error">
+                <ul>
+                    <c:forEach var="error" items="${errors}">
+                        <li>${error}</li>
+                    </c:forEach>
+                </ul>
+            </div>
+        </c:if>
+
+        
         <form method="post" action="Servlet?command=voegToe" novalidate>
-            <label for="titel">Titel van je boek:</label>
-            <input id="titel" name="titel" placeholder="titel" type="text" required>
-            <label for="auteur">de auteur van je boek:</label>
-            <input id="auteur" name="auteur" placeholder="auteur" type="text" required>
-            <label for="aantalPaginas">aantal pagina's dat het boek telt:</label>
-            <input id="aantalPaginas" name="aantalPaginas" placeholder="200" type="number" value="5">
+            <div class="${titelClass}">
+                <label for="titel">Titel van je boek:</label>
+                <input id="titel" name="titel" placeholder="titel" type="text" value="${titelPreviousValue}" required>
+            </div>
+            <div class="${auteurClass}">
+                <label for="auteur">de auteur van je boek:</label>
+                <input id="auteur" name="auteur" placeholder="auteur" type="text" value="${auteurPreviousValue}" required>
+            </div>
+            <div class="${aantalPaginasClass}">
+                <label for="aantalPaginas">aantal pagina's dat het boek telt:</label>
+                <input id="aantalPaginas" name="aantalPaginas" placeholder="200" type="number" value="${aantalPaginasPreviousValue}" required>
+            </div>
             <input id="submit" class="submit" type="submit" value="Voeg dit boek toe">
         </form>
     </article>
 </main>
-<footer>
-    <p>Web ontwikkeling 2 - 2020-2021 - project van Milan Brouns</p>
-</footer>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

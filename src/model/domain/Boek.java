@@ -5,25 +5,33 @@ public class Boek {
     private int aantalpaginas;
 
     public Boek(String titel, String auteur, int aantalpaginas) {
-        if (titel== null||titel.trim().isEmpty())
-            throw new IllegalArgumentException("Dit is gen geldige titel.");
-        if (auteur==null||auteur.trim().isEmpty()){
-            throw new IllegalArgumentException("Dit is geen geldige auteur.");
-        }
-        if (aantalpaginas<5){
-            throw new IllegalArgumentException("Een boek moet minstens 5 pagina's hebben.");
-        }
-        this.titel = titel;
-        this.auteur = auteur;
-        this.aantalpaginas = aantalpaginas;
+
+        setTitel(titel);
+        setAuteur(auteur);
+        setAantalpaginas(aantalpaginas);
+    }
+    public Boek(){
+
     }
 
     public String getTitel() {
         return titel;
     }
 
+    public void setTitel(String titel) {
+        if (titel== null||titel.trim().isEmpty())
+            throw new IllegalArgumentException("Dit is geen geldige titel.");
+        this.titel = titel;
+    }
+
     public String getAuteur() {
         return auteur;
+    }
+
+    public void setAuteur(String auteur) {
+        if (auteur==null||auteur.trim().isEmpty()){
+            throw new IllegalArgumentException("Dit is geen geldige auteur.");}
+        this.auteur = auteur;
     }
 
     public int getAantalpaginas() {
@@ -31,6 +39,9 @@ public class Boek {
     }
 
     public void setAantalpaginas(int aantalpaginas) {
+        if (aantalpaginas<5){
+            throw new IllegalArgumentException("Een boek moet minstens 5 pagina's hebben.");
+        }
         this.aantalpaginas = aantalpaginas;
     }
 

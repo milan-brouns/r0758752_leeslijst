@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="model.DB.LeesLijst" %>
 <%@ page import="model.domain.Boek" %>
 <%@ page import="java.util.ArrayList" %><%--
@@ -8,7 +9,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%ArrayList<Boek> boekenlijst = (ArrayList<Boek>) request.getAttribute("boekenLijst"); %>
 <html>
 <head>
     <title>boeken overzicht</title>
@@ -16,39 +16,33 @@
     <link href="css/style_leeslijst.css" rel="stylesheet">
 </head>
 <body>
-<header>
-    <h1>leeslijst</h1>
-    <nav>
-        <ul>
-            <li><a href="Servlet">Home pagina</a></li>
-            <li><a href="zoek.jsp">zoek een boek</a></li>
-            <li><a href="voegToe.jsp">voeg een boek toe</a></li>
-            <li><a href="Servlet?command=overzicht">overzicht van boeken</a></li>
-        </ul>
-    </nav>
-</header>
+<jsp:include page="header.jsp"></jsp:include>
 <main>
     <h2>Overzicht van alle boeken in de leeslijst</h2>
-    <table>
-        <tr>
-            <th>titel</th>
-            <th>auteur</th>
-            <th>aantal pagina's</th>
-            <th>verwijderen?</th>
-        </tr>
-       <%for (Boek boek: boekenlijst){%>
-        <tr>
-            <td><%=boek.getTitel()%></td>
-            <td><%=boek.getAuteur()%></td>
-            <td><%=boek.getAantalpaginas()%></td>
-            <td><a href="Servlet?command=verwijder&titel=<%=boek.getTitel()%>&auteur=<%=boek.getAuteur()%>">verwijder</a></td>
-        </tr>
-        <%}%>
-
-    </table>
+    <c:choose>
+        <c:when test="${boekenLijst != null}">
+            <table>
+                <tr>
+                    <th>titel</th>
+                    <th>auteur</th>
+                    <th>aantal pagina's</th>
+                    <th>verwijderen?</th>
+                </tr>
+                <c:forEach var="boek" items="${boekenLijst}">
+                <tr>
+                    <td>${boek.titel}</td>
+                    <td>${boek.auteur}</td>
+                    <td>${boek.aantalpaginas}</td>
+                    <td><a href="Servlet?command=verwijder&titel=${boek.titel}&auteur=${boek.auteur}">verwijder</a></td>
+                </tr>
+                </c:forEach>
+            </table>
+        </c:when>
+        <c:otherwise>
+            <p class="enkelep">U heeft alle voorgestelde boeken verwijderd. voegzelf een boek toe om een overzicht te krijgen.</p>
+        </c:otherwise>
+    </c:choose>
 </main>
-<footer>
-    <p>Web ontwikkeling 2 - 2020-2021 - project van Milan Brouns</p>
-</footer>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

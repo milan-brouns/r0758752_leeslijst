@@ -1,4 +1,6 @@
-<%@ page import="model.domain.Boek" %><%--
+<%@ page import="model.domain.Boek" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--
   Created by IntelliJ IDEA.
   User: milan
   Date: 02-Oct-20
@@ -14,17 +16,7 @@
     <link href="css/style_leeslijst.css" rel="stylesheet">
 </head>
 <body>
-<header>
-    <h1>leeslijst</h1>
-    <nav>
-        <ul>
-            <li><a href="Servlet">Home pagina</a></li>
-            <li><a href="zoek.jsp">zoek een boek</a></li>
-            <li><a href="voegToe.jsp">voeg een boek toe</a></li>
-            <li><a href="Servlet?command=overzicht">overzicht van boeken</a></li>
-        </ul>
-    </nav>
-</header>
+<jsp:include page="header.jsp"></jsp:include>
 <main>
     <article>
         <h2>Welkom op de leeslijst</h2>
@@ -36,14 +28,10 @@
     </article>
     <article>
         <h3>hier zijn het dunste en het dikste boek:</h3>
-        <%Boek dunste = (Boek) request.getAttribute("dunste");
-        Boek dikste = (Boek) request.getAttribute("dikste");%>
-        <p>dunste: <%=dunste.toString()%></p>
-        <p>dikste: <%=dikste.toString()%></p>
+        <p>dunste: '${dunste.titel}' geschreven door ${dunste.auteur} en telt ${dunste.aantalpaginas} pagina's.</p>
+        <p>dikste: '${dikste.titel}' geschreven door ${dikste.auteur} en telt ${dikste.aantalpaginas} pagina's.</p>
     </article>
 </main>
-<footer>
-    <p>Web ontwikkeling 2 - 2020-2021 - project van Milan Brouns</p>
-</footer>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

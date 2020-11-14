@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @WebServlet("/Servlet")
 public class Servlet extends HttpServlet {
@@ -56,6 +57,70 @@ public class Servlet extends HttpServlet {
     }
 
     private String voegToe (HttpServletRequest request,HttpServletResponse response){
+        Boek boek = new Boek();
+        ArrayList<String> errors = new ArrayList<>();
+
+        setTitel(request,boek,errors);
+        setAuteur(request,boek,errors);
+        setAantalPaginas(request,boek,errors);
+
+        if (errors.size() == 0){
+            try {
+                leesLijst.voegBoekToe(boek);
+                return overview(request,response);
+            }
+            catch (IllegalArgumentException exc){
+                errors.add(exc.getMessage());
+                request.setAttribute("errors",errors);
+                return "voegToe.jsp";
+            }
+        }else {
+            request.setAttribute("errors",errors);
+            return "voegToe.jsp";
+        }
+
+    }
+//setters voor add methode
+
+    private void setTitel(HttpServletRequest request, Boek boek, ArrayList<String> errors){
+        try {
+            boek.setTitel(request.getParameter("titel"));
+            request.setAttribute("titelClass", "has-success");
+            request.setAttribute("titelPreviousValue", request.getParameter("titel"));
+        }
+        catch (IllegalArgumentException exc){
+            errors.add(exc.getMessage());
+            request.setAttribute("titelClass", "has-error");
+        }
+    }
+    private void setAuteur(HttpServletRequest request, Boek boek, ArrayList<String> errors){
+        try {
+            boek.setAuteur(request.getParameter("auteur"));
+            request.setAttribute("auteurClass", "has-success");
+            request.setAttribute("auteurPreviousValue", request.getParameter("auteur"));
+        }
+        catch (IllegalArgumentException exc){
+            errors.add(exc.getMessage());
+            request.setAttribute("auteurClass", "has-error");
+        }
+    }
+    private void setAantalPaginas(HttpServletRequest request, Boek boek, ArrayList<String> errors){
+        try {
+            boek.setAantalpaginas(Integer.parseInt(request.getParameter("aantalPaginas")));
+            request.setAttribute("aantalPaginasClass", "has-success");
+            request.setAttribute("aantalPaginasPreviousValue", request.getParameter("aantalPaginas"));
+        }
+        catch (NumberFormatException exc){
+            errors.add("het aantal paginas kan enkel cijfers bevatten.");
+            request.setAttribute("aantalPaginasClass", "has-error");
+        }
+        catch (IllegalArgumentException exc){
+            errors.add(exc.getMessage());
+            request.setAttribute("aantalPaginasClass", "has-error");
+        }
+    }
+//einde setters
+ /*   private String voegToe (HttpServletRequest request,HttpServletResponse response){
         String titel = request.getParameter("titel");
         String auteur = request.getParameter("auteur");
         int aantalPaginas = Integer.parseInt(request.getParameter("aantalPaginas"));
@@ -76,13 +141,12 @@ public class Servlet extends HttpServlet {
             }
         }
     }
-
+*/
     private String verwijderRequest(HttpServletRequest request,HttpServletResponse response){
         return "verwijderBevesteging.jsp";
     }
     private String verwijderDefinitief(HttpServletRequest request,HttpServletResponse response){
-        Boek boek = leesLijst.zoekBoek(request.getParameter("titel"));
-        leesLijst.verwijder(boek);
+        leesLijst.verwijder(request.getParameter("titel"));
         return overview(request,response);
     }
 

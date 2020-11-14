@@ -13,17 +13,7 @@
     <title>Zoek een boek</title>
 </head>
 <body>
-<header>
-    <h1>leeslijst</h1>
-    <nav>
-        <ul>
-            <li><a href="Servlet">Home pagina</a></li>
-            <li><a href="zoek.jsp">zoek een boek</a></li>
-            <li><a href="voegToe.jsp">voeg een boek toe</a></li>
-            <li><a href="Servlet?command=overzicht">overzicht van boeken</a></li>
-        </ul>
-    </nav>
-</header>
+<jsp:include page="header.jsp"></jsp:include>
 <main>
     <article>
         <h2>zoek een boek in de leeslijst</h2>
@@ -35,8 +25,6 @@
         </form>
     </article>
 </main>
-<footer>
-    <p>Web ontwikkeling 2 - 2020-2021 - project van Milan Brouns</p>
-</footer>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

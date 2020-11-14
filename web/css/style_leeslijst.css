@@ -85,7 +85,8 @@ p {
 
 
 }
-#error{
+.error{
+    font-size: 1.3rem;
     color: red;
     margin: 10px 15px ;
 }
@@ -115,7 +116,7 @@ label {
 
 input {
     font-size: 1.4rem;
-    width: 100%;
+    width: 95%;
     margin: 5px 15px 15px;
 
 }
@@ -125,6 +126,16 @@ input {
 }
 #submit{
     width: 200px;
+}
+.has-success{
+    background-color: darkseagreen;
+}
+.has-error{
+    background-color: lightcoral;
+}
+div{
+    width: 900px;
+    margin: 2px;
 }
 /*
 table

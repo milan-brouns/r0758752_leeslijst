@@ -35,14 +35,14 @@ public class LeesLijst {
 
     public void voegBoekToe(Boek boek){
         if (!(boek instanceof Boek)){
-            throw new IllegalArgumentException("geeft een boek object mee.");
+            throw new IllegalArgumentException("geeft een geldig boek object mee.");
         }boekenlijst.add(boek);
     }
 
-    public void verwijder(Boek boek){
-        if (boekenlijst.contains(boek)){
-            boekenlijst.remove(boek);
-        }
+    public void verwijder(String titel){
+        Boek boek =zoekBoek(titel);
+        boekenlijst.remove(boek);
+
     }
 
     public Boek getDunsteBoek(){

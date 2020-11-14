@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: milan
@@ -13,31 +14,19 @@
     <link rel="stylesheet" href="css/style_leeslijst.css">
 </head>
 <body>
-<header>
-    <h1>leeslijst</h1>
-    <nav>
-        <ul>
-            <li><a href="Servlet">Home pagina</a></li>
-            <li><a href="zoek.jsp">zoek een boek</a></li>
-            <li><a href="voegToe.jsp">voeg een boek toe</a></li>
-            <li><a href="Servlet?command=overzicht">overzicht van boeken</a></li>
-        </ul>
-    </nav>
-</header>
+<jsp:include page="header.jsp"></jsp:include>
 <main>
     <article>
         <h2>Verwijder dit Boek</h2>
 
-        <p>Ben je zeker dat je het boek "<%=request.getParameter("titel")%>" geschreven door "<%=request.getParameter("auteur")%>" wil verwijderen uit je lees lijst?</p>
+        <p>Ben je zeker dat je het boek "${param.titel}" geschreven door ${param.auteur} wil verwijderen uit je lees lijst?</p>
         <form action="Servlet" method="post">
-            <input type="hidden" name="titel" value="<%=request.getParameter("titel")%>">
+            <input type="hidden" name="titel" value="${param.titel}">
             <input class="submit" type="submit" name="command" value="zeker">
             <input class="submit" type="submit" value="Toch niet">
         </form>
     </article>
 </main>
-<footer>
-    <p>Web ontwikkeling 2 - 2020-2021 - project van Milan Brouns</p>
-</footer>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

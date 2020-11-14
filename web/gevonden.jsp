@@ -1,4 +1,6 @@
-<%@ page import="model.domain.Boek" %><%--
+<%@ page import="model.domain.Boek" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--
   Created by IntelliJ IDEA.
   User: milan
   Date: 25-Oct-20
@@ -12,24 +14,12 @@
     <link rel="stylesheet" href="css/style_leeslijst.css">
     <title>gevonden boek</title>
 </head>
+<jsp:include page="header.jsp"></jsp:include>
 <body>
-<header>
-    <h1>leeslijst</h1>
-    <nav>
-        <ul>
-            <li><a href="Servlet">Home pagina</a></li>
-            <li><a href="zoek.jsp">zoek een boek</a></li>
-            <li><a href="voegToe.jsp">voeg een boek toe</a></li>
-            <li><a href="Servlet?command=overzicht">overzicht van boeken</a></li>
-        </ul>
-    </nav>
-</header>
+
 <main>
-    <%Boek boek = (Boek) request.getAttribute("boek");%>
-    <p class="enkelep">je vroeg naar de volgende gegevens: <%=boek.toString()%></p>
+    <p class="enkelep">je vroeg naar de volgende gegevens: '${boek.titel}' geschreven door ${boek.auteur} en telt ${boek.aantalpaginas} pagina's.</p>
 </main>
-<footer>
-    <p>Web ontwikkeling 2 - 2020-2021 - project van Milan Brouns</p>
-</footer>
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>
