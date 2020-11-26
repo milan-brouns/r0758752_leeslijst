@@ -100,7 +100,6 @@ article p {
 }
 .enkelep{
     padding: 40px 15px;
-    text-align: center;
 
 }
 /*
@@ -127,6 +126,9 @@ input {
 #submit{
     width: 200px;
 }
+#bewaar{
+    width: 250px;
+}
 .has-success{
     background-color: darkseagreen;
 }
@@ -136,6 +138,15 @@ input {
 div{
     width: 900px;
     margin: 2px;
+}
+#cookieForm p {
+    padding: 10px 15px;
+}
+#cookieForm{
+ width: 100%;
+}
+#cookieForm label{
+    font-size: 1.3rem;
 }
 /*
 table
