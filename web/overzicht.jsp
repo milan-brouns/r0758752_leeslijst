@@ -27,6 +27,7 @@
                     <th>auteur</th>
                     <th>aantal pagina's</th>
                     <th>verwijderen?</th>
+                    <th>updaten?</th>
                 </tr>
                 <c:forEach var="boek" items="${boekenLijst}">
                 <tr>
@@ -34,6 +35,7 @@
                     <td>${boek.auteur}</td>
                     <td>${boek.aantalpaginas}</td>
                     <td><a href="Servlet?command=verwijder&titel=${boek.titel}&auteur=${boek.auteur}">verwijder</a></td>
+                    <td><a href="Servlet?command=update&boekTitel=${boek.titel}">update</a></td>
                 </tr>
                 </c:forEach>
             </table>

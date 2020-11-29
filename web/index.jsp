@@ -32,7 +32,7 @@
         <p>dunste: ${dunste}
         <p>dikste: ${dikste}
     </article>
-    <form action="Servlet" method="post" id="cookieForm" novalidate >
+    <form action="Servlet?command=setMinimumDikte" method="post" id="cookieForm" novalidate >
         <p class="enkelep">Hier kun je aan geven wat de minimum dikte van een boek moet zijn.</p>
         <c:if test="${not empty errors}">
             <div class="error">
@@ -47,7 +47,6 @@
         <label for="minimumDikte">Jou minimum aantal pagina's voor een boek is: </label>
         <input type="number" name="minimumDikte" id="minimumDikte" placeholder="200" <c:if test="${vorigeMinimumDikte != null}">value="${vorigeMinimumDikte}"</c:if>>
         </div>
-            <input type="text" name="command" value="setMinimumDikte" hidden>
         <input type="submit" id="bewaar" value="bewaar mijn voorkeur">
     </form>
 </main>

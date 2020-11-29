@@ -38,6 +38,9 @@ public class Servlet extends HttpServlet {
             case "voegToe":
                 destination = voegToe(request, response);
                 break;
+            case "updateBoek":
+                destination = updateBoek(request,response);
+                break;
             case "verwijder":
                 destination = verwijderRequest(request, response);
                 break;
@@ -49,6 +52,9 @@ public class Servlet extends HttpServlet {
                 break;
             case "setMinimumDikte":
                 destination = setMinimumdikte(request, response);
+                break;
+            case "update":
+                destination = update(request,response);
                 break;
             default:
                 destination = home(request, response);
@@ -86,7 +92,23 @@ public class Servlet extends HttpServlet {
         }
 
     }
-//setters voor add methode
+    private String updateBoek(HttpServletRequest request,HttpServletResponse response){
+        Boek boek = leesLijst.zoekBoek(request.getParameter("boekTitel"));
+        ArrayList<String> errors = new ArrayList<>();
+
+        setTitel(request, boek, errors);
+        setAuteur(request, boek, errors);
+        setAantalPaginas(request, boek, errors);
+
+        if (errors.size() == 0) {
+            return overview(request, response);
+
+        } else {
+            request.setAttribute("errors", errors);
+            return "voegToe.jsp";
+        }
+    }
+//setters voor add en update methode
 
     private void setTitel(HttpServletRequest request, Boek boek, ArrayList<String> errors) {
         try {
@@ -116,7 +138,7 @@ public class Servlet extends HttpServlet {
             request.setAttribute("aantalPaginasClass", "has-success");
             request.setAttribute("aantalPaginasPreviousValue", request.getParameter("aantalPaginas"));
         } catch (NumberFormatException exc) {
-            errors.add("het aantal paginas kan enkel cijfers bevatten.");
+            errors.add("het invoer veld voor 'aantal paginas' kan enkel cijfers bevatten.");
             request.setAttribute("aantalPaginasClass", "has-error");
         } catch (IllegalArgumentException exc) {
             errors.add(exc.getMessage());
@@ -174,6 +196,14 @@ public class Servlet extends HttpServlet {
             }
         }
         return -1;
+    }
+
+    public String update(HttpServletRequest request, HttpServletResponse response){
+        Boek boek = leesLijst.zoekBoek(request.getParameter("boekTitel"));
+        request.setAttribute("titelPreviousValue", boek.getTitel());
+        request.setAttribute("auteurPreviousValue", boek.getAuteur());
+        request.setAttribute("aantalPaginasPreviousValue", Integer.toString(boek.getAantalpaginas()));
+        return "voegToe.jsp";
     }
 
     private String home(HttpServletRequest request, HttpServletResponse response) {

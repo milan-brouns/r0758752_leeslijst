@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>voeg boek toe</title>
+    <title>${param.boekTitel == null?'voeg boek toe' : 'update boek'}</title>
     <link href="css/reset.css" rel="stylesheet">
     <link href="css/style_leeslijst.css" rel="stylesheet">
 </head>
@@ -29,7 +29,10 @@
         </c:if>
 
         
-        <form method="post" action="Servlet?command=voegToe" novalidate>
+        <form method="post" action="Servlet?command=${param.boekTitel == null?'voegToe' : 'updateBoek'}" novalidate>
+            <c:if test="${param.boekTitel != null}">
+                <input type="text" name="boekTitel" value="${param.boekTitel}" hidden>
+            </c:if>
             <div class="${titelClass}">
                 <label for="titel">Titel van je boek:</label>
                 <input id="titel" name="titel" placeholder="titel" type="text" value="${titelPreviousValue}" required>
@@ -42,7 +45,7 @@
                 <label for="aantalPaginas">aantal pagina's dat het boek telt:</label>
                 <input id="aantalPaginas" name="aantalPaginas" placeholder="200" type="number" value="${aantalPaginasPreviousValue}" required>
             </div>
-            <input id="submit" class="submit" type="submit" value="Voeg dit boek toe">
+            <input id="submit" class="submit" type="submit" value="${param.boekTitel == null?'voeg dit boek toe' : 'update dit boek'}">
         </form>
     </article>
 </main>
