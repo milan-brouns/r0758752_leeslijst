@@ -14,7 +14,9 @@
     <link href="css/style_leeslijst.css" rel="stylesheet">
 </head>
 <body>
-<jsp:include page="header.jsp"></jsp:include>
+<jsp:include page="header.jsp">
+    <jsp:param name="current" value="voegToe"/>
+</jsp:include>
 <main>
     <article>
         <h2>vul de velden in om je boek toe te voegen</h2>

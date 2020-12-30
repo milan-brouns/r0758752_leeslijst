@@ -2,15 +2,14 @@ package ui.controler;
 
 import model.DB.LeesLijst;
 import model.domain.Boek;
+import model.domain.Log;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 
 @WebServlet("/Servlet")
@@ -39,7 +38,7 @@ public class Servlet extends HttpServlet {
                 destination = voegToe(request, response);
                 break;
             case "updateBoek":
-                destination = updateBoek(request,response);
+                destination = updateBoek(request, response);
                 break;
             case "verwijder":
                 destination = verwijderRequest(request, response);
@@ -54,7 +53,10 @@ public class Servlet extends HttpServlet {
                 destination = setMinimumdikte(request, response);
                 break;
             case "update":
-                destination = update(request,response);
+                destination = update(request, response);
+                break;
+            case "resetSession":
+                destination = resetSession(request);
                 break;
             default:
                 destination = home(request, response);
@@ -80,6 +82,8 @@ public class Servlet extends HttpServlet {
         if (errors.size() == 0) {
             try {
                 leesLijst.voegBoekToe(boek);
+                String activiteit = "toevoegen van het boek \"" + boek.getTitel() + "\"";
+                setLog(request, response, activiteit);
                 return overview(request, response);
             } catch (IllegalArgumentException exc) {
                 errors.add(exc.getMessage());
@@ -92,15 +96,22 @@ public class Servlet extends HttpServlet {
         }
 
     }
-    private String updateBoek(HttpServletRequest request,HttpServletResponse response){
+
+    private String updateBoek(HttpServletRequest request, HttpServletResponse response) {
+        Boek nieuwboek = new Boek();
         Boek boek = leesLijst.zoekBoek(request.getParameter("boekTitel"));
         ArrayList<String> errors = new ArrayList<>();
 
-        setTitel(request, boek, errors);
-        setAuteur(request, boek, errors);
-        setAantalPaginas(request, boek, errors);
+        setTitel(request, nieuwboek, errors);
+        setAuteur(request, nieuwboek, errors);
+        setAantalPaginas(request, nieuwboek, errors);
 
         if (errors.size() == 0) {
+            setTitel(request, boek, errors);
+            setAuteur(request, boek, errors);
+            setAantalPaginas(request, boek, errors);
+            String activiteit = "aanpassing aan het boek \"" + boek.getTitel() + "\"";
+            setLog(request, response, activiteit);
             return overview(request, response);
 
         } else {
@@ -153,15 +164,20 @@ public class Servlet extends HttpServlet {
 
     private String verwijderDefinitief(HttpServletRequest request, HttpServletResponse response) {
         leesLijst.verwijder(request.getParameter("titel"));
+        String activiteit = "verwijderen van het boek \"" + request.getParameter("titel") + "\" uit de lijst";
+        setLog(request, response, activiteit);
         return overview(request, response);
     }
 
     private String zoek(HttpServletRequest request, HttpServletResponse response) {
         Boek boek = leesLijst.zoekBoek(request.getParameter("titel"));
+        String activiteit = "je zogt naar het boek \"" + request.getParameter("titel") + "\"";
+        setLog(request, response, activiteit);
         if (boek == null) {
             return "nietGevonden.jsp";
         } else {
             request.setAttribute("boek", boek);
+
             return "gevonden.jsp";
         }
     }
@@ -176,6 +192,8 @@ public class Servlet extends HttpServlet {
             Cookie cookie = new Cookie("minimunDikte", Integer.toString(minimumDikte));
             response.addCookie(cookie);
             request.setAttribute("vorigeMinimumDikte", minimumDikte);
+            String activiteit = "minimum dikte cookie werd ingesteld op : \"" + minimumDikte + "\" uit de lijst";
+            setLog(request, response, activiteit);
         } catch (NumberFormatException exc) {
             errors.add("het invul veld kan enkel cijfers bevatten.");
             request.setAttribute("minimumDikteClass", "has-error");
@@ -190,15 +208,17 @@ public class Servlet extends HttpServlet {
 
     private int getminimumDikteCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("minimunDikte")) {
-                return Integer.parseInt(cookie.getValue());
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("minimunDikte")) {
+                    return Integer.parseInt(cookie.getValue());
+                }
             }
         }
         return -1;
     }
 
-    public String update(HttpServletRequest request, HttpServletResponse response){
+    public String update(HttpServletRequest request, HttpServletResponse response) {
         Boek boek = leesLijst.zoekBoek(request.getParameter("boekTitel"));
         request.setAttribute("titelPreviousValue", boek.getTitel());
         request.setAttribute("auteurPreviousValue", boek.getAuteur());
@@ -226,6 +246,26 @@ public class Servlet extends HttpServlet {
             request.setAttribute("dikste", "er is geen boek in de lees lijst met meer pagina's dan je opgegeven waarde.");
         }
         return "index.jsp";
+    }
+
+    private void setLog(HttpServletRequest request, HttpServletResponse response, String activiteit) {
+        Log log = new Log(activiteit);
+        HttpSession session = request.getSession();
+        if (session.getAttribute("logboek") == null) {
+            ArrayList<Log> logboek = new ArrayList<>();
+            logboek.add(log);
+            session.setAttribute("logboek", logboek);
+        } else {
+            ArrayList<Log> logboek = (ArrayList<Log>) session.getAttribute("logboek");
+            logboek.add(log);
+            session.setAttribute("logboek", logboek);
+        }
+
+    }
+
+    private String  resetSession(HttpServletRequest request){
+        request.getSession().invalidate();
+        return "logbook.jsp";
     }
 
 }

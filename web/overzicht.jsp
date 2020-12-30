@@ -16,7 +16,9 @@
     <link href="css/style_leeslijst.css" rel="stylesheet">
 </head>
 <body>
-<jsp:include page="header.jsp"></jsp:include>
+<jsp:include page="header.jsp">
+    <jsp:param name="current" value="overzicht"/>
+</jsp:include>
 <main>
     <h2>Overzicht van alle boeken in de leeslijst</h2>
     <c:choose>

@@ -13,7 +13,9 @@
     <title>Zoek een boek</title>
 </head>
 <body>
-<jsp:include page="header.jsp"></jsp:include>
+<jsp:include page="header.jsp">
+    <jsp:param name="current" value="zoek"/>
+</jsp:include>
 <main>
     <article>
         <h2>zoek een boek in de leeslijst</h2>
