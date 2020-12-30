@@ -228,11 +228,11 @@ public class Servlet extends HttpServlet {
 
     private String home(HttpServletRequest request, HttpServletResponse response) {
         int minimumDikte = 5;
-        if (getminimumDikteCookie(request) > 5) {
+        if (request.getAttribute("vorigeMinimumDikte") != null) {
+            minimumDikte = Integer.parseInt(request.getAttribute("vorigeMinimumDikte").toString());
+        } else if (getminimumDikteCookie(request) > 5) {
             minimumDikte = getminimumDikteCookie(request);
             request.setAttribute("vorigeMinimumDikte", minimumDikte);
-        } else if (request.getAttribute("vorigeMinimumDikte") != null) {
-            minimumDikte = Integer.parseInt(request.getAttribute("vorigeMinimumDikte").toString());
         }
 
         if (leesLijst.getDunsteBoek(minimumDikte) != null) {
